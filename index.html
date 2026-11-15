@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leaven Labs: free, open-source software for churches</title>
+<meta name="description" content="Leaven Labs makes small, free, open-source apps that help take care of a church's weekly tasks. They run on your own computer.">
+<meta property="og:title" content="Leaven Labs">
+<meta property="og:description" content="Free, open-source software for churches.">
+<meta property="og:type" content="website">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: a left-set hero beside one gradient logo panel; projects as wide alternating rows
+     (words | screenshot on a gradient mat); principles as a plain ruled list. The gradient is
+     the one loud thing; everything else stays quiet. */
+
+  /* Daybreak: indigo ink, a sunrise of rose, coral and amber */
+  :root {
+    --L-bg: #fbf9fb; --L-surface: #ffffff; --L-ink: #1b1b3a; --L-sub: #5a5873; --L-line: #e6e1ea;
+    --L-accent: #b62c62; --L-wash: #f5eff3;
+    --D-bg: #131229; --D-surface: #1d1c3b; --D-ink: #f4f0f7; --D-sub: #b0abc8; --D-line: #302e57;
+    --D-accent: #ff9c7c; --D-wash: #191836;
+    --g1: #e0447f; --g2: #ff7a4d; --g3: #ffb52e; --on-grad: #1b1b3a;
+    --display: "Fraunces", Georgia, "Times New Roman", serif; --display-track: -.02em;
+  }
+  :root {
+    --bg: var(--L-bg); --surface: var(--L-surface); --ink: var(--L-ink); --sub: var(--L-sub);
+    --line: var(--L-line); --accent: var(--L-accent); --wash: var(--L-wash);
+    --shadow: 0 1px 2px rgba(20, 18, 50, .06), 0 18px 40px rgba(20, 18, 50, .10);
+    --show-light: block; --show-dark: none;
+    --grad: linear-gradient(120deg, var(--g1), var(--g2) 55%, var(--g3));
+    --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: var(--D-bg); --surface: var(--D-surface); --ink: var(--D-ink); --sub: var(--D-sub);
+      --line: var(--D-line); --accent: var(--D-accent); --wash: var(--D-wash);
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 18px 40px rgba(0, 0, 0, .4);
+      --show-light: none; --show-dark: block; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: var(--D-bg); --surface: var(--D-surface); --ink: var(--D-ink); --sub: var(--D-sub);
+    --line: var(--D-line); --accent: var(--D-accent); --wash: var(--D-wash);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 18px 40px rgba(0, 0, 0, .4);
+    --show-light: none; --show-dark: block; color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font: 17px/1.6 var(--body); -webkit-text-size-adjust: 100%; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+                 z-index: 10; background: var(--surface); }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  :focus-visible { outline: 3px solid var(--g2); outline-offset: 3px; border-radius: 6px; }
+  h1, h2, h3 { font-family: var(--display); letter-spacing: var(--display-track); line-height: 1.08;
+               margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  .wrap { max-width: 1120px; margin: 0 auto;
+          padding-left: max(20px, env(safe-area-inset-left, 0px));
+          padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+  .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--sub); }
+  .gradtext { background: linear-gradient(100deg, var(--g1), var(--g2)); -webkit-background-clip: text;
+              background-clip: text; color: transparent; }
+
+  /* top bar */
+  .top .wrap { display: flex; align-items: center; gap: 12px 28px; flex-wrap: wrap; padding-block: 22px; }
+  .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none;
+           font: 600 23px/1 var(--display); letter-spacing: var(--display-track); margin-right: auto; }
+  .brand svg { width: 20px; height: 40px; }
+  .top nav { display: flex; gap: 6px 26px; flex-wrap: wrap; font-weight: 500; font-size: 16px; }
+  .top nav a { color: var(--sub); text-decoration: none; }
+  .top nav a:hover { color: var(--ink); text-decoration: underline; }
+
+  /* hero */
+  .hero .wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 48px; align-items: center;
+                padding-block: 40px 76px; }
+  .hero h1 { font-size: clamp(2.5rem, 6vw, 4.4rem); margin-top: 16px; }
+  .hero .lead { font-size: clamp(1.08rem, 1.6vw, 1.25rem); color: var(--sub); max-width: 54ch; margin-top: 22px; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; border-radius: 12px;
+         font-weight: 600; text-decoration: none; color: var(--ink); background: var(--surface);
+         border: 1px solid var(--line); }
+  .btn:hover { border-color: var(--sub); }
+  .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); position: relative; }
+  .btn.primary::after { content: ""; position: absolute; inset: auto 14px -5px; height: 12px; border-radius: 50%;
+                        background: var(--grad); filter: blur(12px); opacity: .8; z-index: -1; }
+  .btn svg { width: 19px; height: 19px; flex: none; }
+  .facts { list-style: none; display: flex; gap: 6px 22px; flex-wrap: wrap; padding: 0; margin: 30px 0 0;
+           color: var(--sub); font-size: 15px; }
+  .facts li::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+                      background: var(--grad); margin-right: 9px; }
+
+  .panel { position: relative; isolation: isolate; overflow: hidden; border-radius: 32px; background: var(--grad);
+           color: var(--on-grad); aspect-ratio: 5 / 5.4; max-width: 100%; display: grid; place-items: center;
+           box-shadow: var(--shadow); }
+  .panel::before, .panel::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; filter: blur(46px); }
+  .panel::before { width: 70%; height: 70%; left: -18%; top: -20%; background: var(--g3); opacity: .75;
+                   animation: drift 16s ease-in-out infinite alternate; }
+  .panel::after { width: 76%; height: 76%; right: -24%; bottom: -26%; background: var(--g1); opacity: .8;
+                  animation: drift 20s ease-in-out infinite alternate-reverse; }
+  @keyframes drift { to { transform: translate(14%, 10%) scale(1.15); } }
+  @media (prefers-reduced-motion: reduce) { .panel::before, .panel::after { animation: none; } }
+  .lockup { display: grid; justify-items: center; gap: 22px; padding: 24px; text-align: center; }
+  .lockup svg { width: clamp(70px, 9vw, 104px); height: auto; --grain: currentColor; }
+  .lockup b { font: 600 clamp(2rem, 4vw, 3rem)/1 var(--display); letter-spacing: var(--display-track); }
+  .lockup span { font-size: 15px; font-weight: 500; opacity: .85; }
+
+  /* projects */
+  .band { background: var(--wash); border-block: 1px solid var(--line); }
+  .band > .wrap, .plain > .wrap { padding-block: 72px; }
+  .head { display: grid; gap: 12px; max-width: 60ch; margin-bottom: 44px; }
+  .head h2 { font-size: clamp(1.9rem, 3.6vw, 2.7rem); }
+  .head p { color: var(--sub); }
+  .projects { display: grid; gap: 28px; }
+  .project { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); background: var(--surface);
+             border: 1px solid var(--line); border-radius: 24px; overflow: hidden; }
+  .project:nth-child(even) .words { order: 2; }
+  .words { padding: clamp(24px, 4vw, 44px); display: grid; gap: 16px; align-content: center; min-width: 0; }
+  .name { display: flex; align-items: center; gap: 14px; }
+  .name img { width: 52px; height: 52px; flex: none; }
+  .name h3 { font-size: clamp(1.5rem, 2.6vw, 1.95rem); }
+  .pitch { font-size: 1.1rem; font-weight: 500; }
+  .words ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; color: var(--sub); font-size: 16px; }
+  .words li { padding-left: 22px; position: relative; }
+  .words li::before { content: ""; position: absolute; left: 0; top: .62em; width: 10px; height: 3px;
+                      border-radius: 2px; background: var(--grad); }
+  .meta { display: flex; gap: 8px; flex-wrap: wrap; font-size: 14px; font-weight: 500; }
+  .meta span { border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px; color: var(--sub);
+               font-variant-numeric: tabular-nums; }
+  .meta .ver { color: var(--ink); border-color: var(--sub); }
+  .links { display: flex; gap: 8px 20px; flex-wrap: wrap; font-weight: 600; }
+  .links a { text-decoration: none; }
+  .links a:hover { text-decoration: underline; }
+  .mat { background: var(--grad); padding: clamp(18px, 3.2vw, 38px) clamp(18px, 3.2vw, 38px) 0; display: flex;
+         align-items: flex-end; min-width: 0; }
+  .mat img { width: 100%; height: auto; border-radius: 10px 10px 0 0; box-shadow: 0 10px 40px rgba(10, 8, 40, .35); }
+  .shot-light { display: var(--show-light); }
+  .shot-dark { display: var(--show-dark); }
+  .project.simple { grid-template-columns: minmax(0, 1fr); }
+  .next { border: 2px dashed var(--line); border-radius: 24px; padding: clamp(24px, 4vw, 40px); display: flex;
+          gap: 14px 32px; align-items: center; flex-wrap: wrap; }
+  .next div { flex: 1 1 320px; min-width: 0; display: grid; gap: 6px; }
+  .next h3 { font-size: 1.45rem; }
+  .next p { color: var(--sub); }
+
+  /* how we build */
+  .rules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+           gap: 0 56px; }
+  .rules li { border-top: 1px solid var(--line); padding: 26px 0 30px; display: grid; gap: 8px; }
+  .rules h3 { font-size: 1.35rem; }
+  .rules p { color: var(--sub); max-width: 46ch; }
+
+  /* about */
+  .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px 64px; align-items: start; }
+  .about blockquote { margin: 0; font: 500 clamp(1.5rem, 2.8vw, 2.1rem)/1.25 var(--display);
+                      letter-spacing: var(--display-track); text-wrap: balance; }
+  .about cite { display: block; margin-top: 16px; font: 500 15px var(--body); letter-spacing: 0; color: var(--sub);
+                font-style: normal; }
+  .about .text { display: grid; gap: 16px; color: var(--sub); }
+  .about .text strong { color: var(--ink); }
+
+  footer .wrap { display: flex; gap: 10px 28px; flex-wrap: wrap; align-items: center; padding-block: 30px 44px;
+                 color: var(--sub); font-size: 15px; }
+  footer .wrap > :first-child { margin-right: auto; }
+  footer a { color: var(--sub); }
+  .rule { height: 4px; background: var(--grad); }
+
+  @media (max-width: 860px) {
+    .hero .wrap, .project, .about { grid-template-columns: minmax(0, 1fr); }
+    .hero .wrap { padding-block: 20px 56px; gap: 36px; }
+    .panel { aspect-ratio: auto; padding-block: 28px; }
+    .project:nth-child(even) .words { order: 0; }
+    .rules { grid-template-columns: minmax(0, 1fr); }
+    .band > .wrap, .plain > .wrap { padding-block: 52px; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="grain" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" style="stop-color:var(--g1)"/>
+      <stop offset="1" style="stop-color:var(--g3)"/>
+    </linearGradient>
+    <symbol id="mark" viewBox="0 0 120 240">
+      <g fill="currentColor">
+        <rect x="54" y="56" width="12" height="180" rx="6"/>
+        <ellipse cx="88" cy="88" rx="29" ry="15" transform="rotate(-34 88 88)"/>
+        <ellipse cx="32" cy="88" rx="29" ry="15" transform="rotate(34 32 88)"/>
+        <ellipse cx="88" cy="128" rx="29" ry="15" transform="rotate(-34 88 128)"/>
+        <ellipse cx="32" cy="128" rx="29" ry="15" transform="rotate(34 32 128)"/>
+        <ellipse cx="88" cy="168" rx="29" ry="15" transform="rotate(-34 88 168)"/>
+        <ellipse cx="32" cy="168" rx="29" ry="15" transform="rotate(34 32 168)"/>
+      </g>
+      <ellipse cx="60" cy="32" rx="15" ry="29" style="fill:var(--grain, url(#grain))"/>
+    </symbol>
+  </defs>
+</svg>
+
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" id="top"><svg aria-hidden="true"><use href="#mark"/></svg>Leaven Labs</a>
+    <nav aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#how">How we build</a>
+      <a href="#about">About</a>
+      <a href="https://github.com/Leaven-Labs">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Leaven Labs</p>
+        <h1>Free, open-source software for <span class="gradtext">churches.</span></h1>
+        <p class="lead">We make small apps that help take care of a church's weekly tasks. They run on your own computer, free of cost.</p>
+        <div class="actions">
+          <a class="btn primary" href="#projects">See the projects</a>
+          <a class="btn" href="https://github.com/Leaven-Labs">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+            Leaven-Labs on GitHub</a>
+        </div>
+        <ul class="facts">
+          <li>2 apps so far</li>
+          <li>Windows, Mac and Linux</li>
+          <li>MIT License</li>
+        </ul>
+      </div>
+      <div class="panel" aria-hidden="true">
+        <div class="lockup">
+          <svg viewBox="0 0 120 240"><use href="#mark"/></svg>
+          <b>Leaven Labs</b>
+          <span>Free, open-source software for churches.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="projects">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Projects</p>
+        <h2>What we have made so far</h2>
+        <p>Each app has its own page with downloads and a guide, and its own repository on GitHub.</p>
+      </div>
+      <div class="projects">
+        <article class="project" data-repo="ChurchRadio-Studio">
+          <div class="words">
+            <div class="name"><img src="assets/churchradio-icon.svg" alt=""><h3>ChurchRadio Studio</h3></div>
+            <p class="pitch">Turn your Sunday service recording into a finished radio broadcast, in one drop.</p>
+            <ul>
+              <li>Cuts the organ prelude and ends at the congregation's answer to the dismissal.</li>
+              <li>Fills the rest of the hour with your own songs that fit the church year.</li>
+              <li>Nothing about your services leaves your computer.</li>
+            </ul>
+            <div class="meta"><span class="ver">v1.5.0</span><span>Windows · Mac · Linux</span><span>Python</span><span>MIT</span></div>
+            <div class="links">
+              <a href="https://churchradiostudio.leavenlabs.org">Website and downloads</a>
+              <a href="https://github.com/Leaven-Labs/ChurchRadio-Studio">Source on GitHub</a>
+            </div>
+          </div>
+          <div class="mat">
+            <img loading="lazy" class="shot-light" src="assets/churchradio-light.png" width="1180" height="1010" alt="ChurchRadio Studio after a broadcast is made: the finished MP3, where the service was cut, and the hour">
+            <img loading="lazy" class="shot-dark" src="assets/churchradio-dark.png" width="1180" height="1010" alt="ChurchRadio Studio after a broadcast is made: the finished MP3, where the service was cut, and the hour">
+          </div>
+        </article>
+
+        <article class="project" data-repo="Stream-Scheduler">
+          <div class="words">
+            <div class="name"><img src="assets/streamscheduler-icon.svg" alt=""><h3>Stream Scheduler</h3></div>
+            <p class="pitch">Schedules your weekly live streams on YouTube by itself, with the date already in the title.</p>
+            <ul>
+              <li>Write the title once. Each week's stream gets its own date, such as "Christmas Eve Service - December 24, 2026".</li>
+              <li>Points a page of your Wix or WordPress site at the coming stream.</li>
+              <li>Alerts you by email, Discord, Slack or Pushover if a stream could not be scheduled or a sign-in stopped working.</li>
+            </ul>
+            <div class="meta"><span class="ver">v0.0.5 alpha</span><span>Windows · Mac · Linux</span><span>Python</span><span>MIT</span></div>
+            <div class="links">
+              <a href="https://streamscheduler.leavenlabs.org">Website and downloads</a>
+              <a href="https://github.com/Leaven-Labs/Stream-Scheduler">Source on GitHub</a>
+            </div>
+          </div>
+          <div class="mat">
+            <img loading="lazy" src="assets/streamscheduler-dark.png" width="1120" height="740" alt="Stream Scheduler's list of upcoming streams">
+          </div>
+        </article>
+
+        <div class="next" id="next">
+          <div>
+            <h3>What should come next?</h3>
+            <p>If your church does the same job by hand every week, it may be a job for a small app. Tell us about it.</p>
+          </div>
+          <a class="btn" href="https://github.com/Leaven-Labs">Suggest an idea on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="plain" id="how">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">How we build</p>
+        <h2>Four promises in every app</h2>
+      </div>
+      <ul class="rules">
+        <li><h3>Free, and it stays free</h3>
+          <p>Every app is under the MIT License. Any congregation may use it, copy it, change it and share it.</p></li>
+        <li><h3>Everything stays with you</h3>
+          <p>The apps run on your own computer. Your recordings never leave it, and sign-ins are kept in the system keychain, never in a file.</p></li>
+        <li><h3>Written for volunteers</h3>
+          <p>Plain words, a guided setup, and a light and a dark look. No one needs to be the computer person.</p></li>
+        <li><h3>Open for anyone to review</h3>
+          <p>All the code and every change is public on GitHub, with a security policy in each repository.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band" id="about">
+    <div class="wrap about">
+      <blockquote>"The kingdom of heaven is like leaven that a woman took and hid in three measures of flour, till it was all leavened."
+        <cite>Matthew 13:33</cite></blockquote>
+      <div class="text">
+        <p><strong>A little goes a long way.</strong> Leaven Labs began with one app, built by Aaron Steger
+          to help churches and shared freely so any congregation can use it.</p>
+        <p>Found a problem, or want to help? Each project takes issues and pull requests on GitHub.</p>
+        <div class="actions" style="margin-top:6px">
+          <a class="btn primary" href="https://github.com/Leaven-Labs">Visit Leaven-Labs on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="rule"></div>
+<footer>
+  <div class="wrap">
+    <span>© 2026 Leaven Labs. Free software under the MIT License.</span>
+    <a href="https://churchradiostudio.leavenlabs.org">ChurchRadio Studio</a>
+    <a href="https://streamscheduler.leavenlabs.org">Stream Scheduler</a>
+    <a href="https://github.com/Leaven-Labs">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  // Keeps the page up to date from GitHub: the newest version of each app, and a plain card for
+  // any new public repository. If GitHub cannot be reached, the page stays as it is written.
+  (function () {
+    var ORG = "Leaven-Labs", api = "https://api.github.com/";
+    function get(path) {
+      return fetch(api + path, { headers: { Accept: "application/vnd.github+json" } })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); });
+    }
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text) e.textContent = text;
+      return e;
+    }
+    function link(href, text) { var a = el("a", "", text); a.href = href; return a; }
+    function version(card, repo) {
+      get("repos/" + ORG + "/" + repo + "/releases?per_page=1").then(function (list) {
+        var ver = card.querySelector(".ver"), rel = list[0];
+        if (!ver || !rel || !rel.tag_name) return;
+        if (ver.textContent.split(" ")[0] === rel.tag_name) return;
+        ver.textContent = rel.tag_name + (rel.prerelease ? " pre-release" : "");
+      }).catch(function () {});
+    }
+    function card(repo) {
+      var a = el("article", "project simple"), w = el("div", "words"), n = el("div", "name");
+      a.dataset.repo = repo.name;
+      n.appendChild(el("h3", "", repo.name.replace(/[-_]+/g, " ")));
+      w.appendChild(n);
+      if (repo.description) w.appendChild(el("p", "pitch", repo.description));
+      var meta = el("div", "meta");
+      meta.appendChild(el("span", "ver", "New"));
+      if (repo.language) meta.appendChild(el("span", "", repo.language));
+      if (repo.license && repo.license.spdx_id && repo.license.spdx_id !== "NOASSERTION")
+        meta.appendChild(el("span", "", repo.license.spdx_id));
+      w.appendChild(meta);
+      var links = el("div", "links");
+      if (/^https:\/\//.test(repo.homepage || "")) links.appendChild(link(repo.homepage, "Website"));
+      links.appendChild(link(repo.html_url, "Source on GitHub"));
+      w.appendChild(links);
+      a.appendChild(w);
+      return a;
+    }
+    var next = document.getElementById("next");
+    document.querySelectorAll(".project[data-repo]").forEach(function (c) { version(c, c.dataset.repo); });
+    get("orgs/" + ORG + "/repos?type=public&sort=created&direction=asc&per_page=100").then(function (repos) {
+      repos.forEach(function (repo) {
+        if (repo.fork || repo.archived || repo.name === ".github" || /\.github\.io$/i.test(repo.name)) return;
+        if (document.querySelector('.project[data-repo="' + repo.name.replace(/"/g, "") + '"]')) return;
+        var c = card(repo);
+        next.parentNode.insertBefore(c, next);
+        version(c, repo.name);
+      });
+    }).catch(function () {});
+  })();
+</script>
+</body>
+</html>
