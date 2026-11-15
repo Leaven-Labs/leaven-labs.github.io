@@ -13,10 +13,14 @@
     <path d="M56 108H200"/>
     <path d="M96 52V84M160 52V84"/>
   </g>
-  <!-- going live on it -->
+  <!-- that comes round by itself -->
   <g fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round">
-    <path d="M153.3 132.8A33 33 0 0 1 153.3 175.2"/>
-    <path d="M102.7 132.8A33 33 0 0 0 102.7 175.2"/>
+    <path d="M103.6 145.1A26 26 0 0 1 150.5 141"/>
+    <path d="M152.4 162.9A26 26 0 0 1 105.5 167"/>
   </g>
-  <circle cx="128" cy="154" r="15" fill="#ff6b81"/>
+  <g fill="#ffffff" stroke="#ffffff" stroke-width="4" stroke-linejoin="round">
+    <path d="M156.1 150.7L158.7 136.3L142.3 145.7Z"/>
+    <path d="M99.9 157.3L97.3 171.7L113.7 162.3Z"/>
+  </g>
+  <circle cx="128" cy="154" r="9" fill="#ff6b81"/>
 </svg>
